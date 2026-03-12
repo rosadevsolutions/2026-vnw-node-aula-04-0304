@@ -10,3 +10,10 @@ const PORT = process.env.PORT || 3000;
 
 // 04 - Middleware para parsear JSON no corpo das requisições
 app.use(express.json());
+
+// 05 - Definição de uma rota para a raiz do site ("/") 
+// que responde com "Hello World!"
+app.get("/", (req, res) => {
+  // 06 - Envia uma resposta JSON com a mensagem "Hello World!"
+  res.json({message: "Hello World!"});
+});
