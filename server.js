@@ -8,22 +8,30 @@ const app = express();
 // irá escutar (3000 ou a porta definida na variável de ambiente)
 const PORT = process.env.PORT || 3000;
 
-// 04 - Middleware para parsear JSON no corpo das requisições
-app.use(express.json());
+// 04 - Middleware personalizado para logar as requisições
+function meuLog(req, res, next) {
+  // 05 - Exibe no console a data, método e URL da requisição
+  console.log(`[${new Date().toLocaleDateString('pt-BR')}] - Requisição (método: ${req.method}) realizada no endpoint "${req.url}"`);
+  // 06 - Chama a próxima função de middleware na pilha
+  next();
+}
+// 07 - Uso do middleware personalizado para logar as requisições
+app.use(meuLog);
 
-// 05 - Definição de uma rota para a raiz do site ("/") 
+
+// 08 - Definição de uma rota para a raiz do site ("/") 
 // que responde com "Hello World!"
 app.get("/", (req, res) => {
-  // 06 - Envia uma resposta JSON com a mensagem "Hello World!"
-  res.json({message: "Hello World!"});
+  // 09 - Envia uma resposta JSON com a mensagem "Hello World!"
+  res.send({message: "Hello World!"});
 });
 
-// 07 - Definição de uma rota para "/data" 
+// 10 - Definição de uma rota para "/data" 
 app.post("/data", (req, res) => {
-  // 08 - Extrai os dados do corpo da requisição
+  // 11 - Extrai os dados do corpo da requisição
   const data = req.body;
 
-  // 09 - Envia uma resposta JSON com 
+  // 12 - Envia uma resposta JSON com 
   // a mensagem "Dados recebidos!" e os dados recebidos
   res.status(200).json({
     message: "Dados recebidos!",
