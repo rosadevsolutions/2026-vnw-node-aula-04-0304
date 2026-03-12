@@ -17,3 +17,16 @@ app.get("/", (req, res) => {
   // 06 - Envia uma resposta JSON com a mensagem "Hello World!"
   res.json({message: "Hello World!"});
 });
+
+// 07 - Definição de uma rota para "/data" 
+app.post("/data", (req, res) => {
+  // 08 - Extrai os dados do corpo da requisição
+  const data = req.body;
+
+  // 09 - Envia uma resposta JSON com 
+  // a mensagem "Dados recebidos!" e os dados recebidos
+  res.status(200).json({
+    message: "Dados recebidos!",
+    data
+  });
+});
