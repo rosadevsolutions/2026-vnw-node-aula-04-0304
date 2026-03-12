@@ -30,3 +30,9 @@ app.post("/data", (req, res) => {
     data
   });
 });
+
+// 10 - Início do servidor na porta 3000
+app.listen(PORT, () => {
+  // 11 - Exibe no console a mensagem indicando que o servidor está rodando e a URL para acessá-lo
+  console.log(`Servidor rodando na porta http://localhost:${PORT}`);
+});
