@@ -11,36 +11,60 @@ const PORT = process.env.PORT || 3000;
 // 04 - Middleware personalizado para logar as requisições
 function meuLog(req, res, next) {
   // 05 - Exibe no console a data, método e URL da requisição
-  console.log(`[${new Date().toLocaleDateString('pt-BR')}] - Requisição (método: ${req.method}) realizada no endpoint "${req.url}"`);
+  console.log(
+    `\nSTATUS: Requisição realizada \nMÉTODO: ${req.method} \nENDPOINT: "${req.url}" \nDATA: ${new Date().toLocaleDateString("pt-BR")}
+    \n`,
+  );
   // 06 - Chama a próxima função de middleware na pilha
   next();
 }
+
+function verificarAcesso(req, res, next) {
+  const acessoNegado = true;
+
+  if (acessoNegado) {
+    res.send(
+      "🔴 ACESSO NEGADO! Acesso restrito a usuários devidamente autorizados.",
+    );
+  }
+  next();
+}
+
 // 07 - Uso do middleware personalizado para logar as requisições
 app.use(meuLog);
 
-
-// 08 - Definição de uma rota para a raiz do site ("/") 
-// que responde com "Hello World!"
+// 08 - Definição de uma rota para a raiz do site ("/")"
 app.get("/", (req, res) => {
-  // 09 - Envia uma resposta JSON com a mensagem "Hello World!"
-  res.send({message: "Hello World!"});
+  // 09 - Responde enviando uma mensagem "Dia chuvoso!"
+  res.send("Usuário conectado");
 });
 
-// 10 - Definição de uma rota para "/data" 
-app.post("/data", (req, res) => {
-  // 11 - Extrai os dados do corpo da requisição
-  const data = req.body;
+// 12 - Definição de uma rota específica do site ("/area-restrita")
+app.get("/area-restrita", verificarAcesso, (req, res) => {
+  // 13 - Enviar uma resposta com uma mensagem "ACESSO NEGADO!"
+  res.send("🟢 ACESSO AUTORIZADO! Seja bem-vindo!");
+});
 
-  // 12 - Envia uma resposta JSON com 
-  // a mensagem "Dados recebidos!" e os dados recebidos
-  res.status(200).json({
-    message: "Dados recebidos!",
-    data
-  });
+// 14 - Definição de rota dinamica para capturar o nome do produto a partir da URL
+app.get("/produto/:nome", (req, res) => {
+  // 15 - Capturar o valor do parâmetro "nome" da URL usando req.params.nome
+  const nome = req.params.nome;
+  // 16 - Formatar o nome com a primeira letra maiúscula e o restante em minúscula
+  const nomeFormatado = nome.charAt(0).toUpperCase() + nome.slice(1);
+  // 17 - Enviar uma resposta com a mensagem "PRODUTO SELECIONADO: [NOME DO PRODUTO]"
+  res.send(`PRODUTO SELECIONADO: ${nomeFormatado}`);
+});
+
+// 15 - Definição de rota dinamica para capturar o ID do usuário a partir da URL
+app.get("/usuario/:id", (req, res) => {
+  const id = req.params.id;
+  res.send(`ID DO USUÁRIO: ${id}`);
 });
 
 // 10 - Início do servidor na porta 3000
 app.listen(PORT, () => {
   // 11 - Exibe no console a mensagem indicando que o servidor está rodando e a URL para acessá-lo
-  console.log(`Servidor rodando na porta http://localhost:${PORT}`);
+  console.log(
+    `\n👍 SERVIDOR INICIALIZADO | 🏚️ PORTA: http://localhost:${PORT}`,
+  );
 });
